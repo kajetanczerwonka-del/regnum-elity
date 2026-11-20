@@ -172,8 +172,9 @@
     <h1>Regnum — Elitarne Potwory (1★ &amp; 2★)</h1>
     <p>Wszystkie animowane podglądy (0★ oryginał | 1★ | 2★, kierunki S/E/W/N 3× + podgląd 1× w ciemnej jaskini). Kliknij dowolny GIF, aby powiększyć.</p>
     <div class="filters">
-      <button class="filter-btn active" data-filter="all">Wszystkie (10)</button>
-      <button class="filter-btn" data-filter="elf">Elf — 3 Style (3)</button>
+      <button class="filter-btn active" data-filter="all">Wszystkie (12)</button>
+      <button class="filter-btn" data-filter="drow">Rodzina Drow (3)</button>
+      <button class="filter-btn" data-filter="elf">Inne Style Elfa (2)</button>
       <button class="filter-btn" data-filter="live">Na Stagingu (5)</button>
       <button class="filter-btn" data-filter="alt">Warianty Alternatywne (2)</button>
     </div>
@@ -191,23 +192,37 @@
     const items = [
       {
         file: "06_elf_styl1_drow.gif",
-        title: "Elf #62 — Styl 1: Mroczny Elf / Drow",
-        cat: "elf",
-        badge: ["Nowy koncept", "badge-new"],
-        desc: "1★ Shadow Drow (obsydianowa skóra, białe włosy, srebrne naramienniki, różowe oczy) • 2★ Nightblade Drow (płaszcz cienia, srebrna korona z rubinem, zakrzywione ostrze cienia i iskry)."
+        title: "Elf #62 — Mroczny Elf / Drow (Poprawiona szata 45°)",
+        cat: "drow",
+        badge: ["Rodzina Drow", "badge-new"],
+        desc: "1★ Shadow Drow (obsydianowa skóra, białe włosy, srebrne naramienniki, różowe oczy) • 2★ Nightblade Drow (poprawiona, miękko pofałdowana peleryna w osi 45° ze srebrną klamrą i falującym brzegiem, srebrna korona z rubinem i zakrzywione ostrze cienia)."
+      },
+      {
+        file: "09_elf_scout_drow.gif",
+        title: "Elf Scout #64 — Drow Stalker / Void-Bow Assassin",
+        cat: "drow",
+        badge: ["Rodzina Drow", "badge-new"],
+        desc: "1★ Drow Stalker (ciemno-śliwkowy pancerz zwiadowcy, obsydianowo-srebrny łuk, białe włosy, karmazynowe oczy) • 2★ Nightstalker (mroczny kaptur zabójcy z klamrą, postrzępiony płaszcz zwiadowcy 45° oraz rozjarzony Łuk Cienia / Void-Bow z iskrami)."
+      },
+      {
+        file: "10_elf_arcanist_drow.gif",
+        title: "Elf Arcanist #63 — Drow Arcanist / Abyssal Archmage",
+        cat: "drow",
+        badge: ["Rodzina Drow", "badge-new"],
+        desc: "1★ Drow Arcanist (obsydianowa skóra, czarno-ametystowa szata, srebrny napierśnik z purpurowym klejnotem) • 2★ Abyssal Archmage (wysoka zakrzywiona korona cienia, jarzące runy wzdłuż fałd szaty oraz lewitująca Kula Pustki / Void Orb)."
       },
       {
         file: "07_elf_styl2_cierniowy.gif",
         title: "Elf #62 — Styl 2: Cierniowy Druid / Rogaty Elf",
         cat: "elf",
-        badge: ["Nowy koncept", "badge-new"],
+        badge: ["Inny styl", "badge-alt"],
         desc: "1★ Briar Elf (kora, mech, miedziane włosy, młode rogi, szmaragdowe oczy) • 2★ Blight Warden (wielkie poroże jelenia z jarzącymi pąkami, kostur z kryształem, peleryna z liści i zarodniki)."
       },
       {
         file: "08_elf_styl3_sloneczny.gif",
         title: "Elf #62 — Styl 3: Słoneczny / Astralny Wysoki Elf",
         cat: "elf",
-        badge: ["Nowy koncept", "badge-new"],
+        badge: ["Inny styl", "badge-alt"],
         desc: "1★ Sun-Gilded Elf (szkarłatno-złota tunika, złote naramienniki, szafirowy pas) • 2★ Solar Archon (perłowo-złota zbroja, promienista aureola słońca, świetliste skrzydła i krążące kule światła)."
       },
       {

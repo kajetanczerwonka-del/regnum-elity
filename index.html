@@ -214,10 +214,10 @@
       },
       {
         file: "21_dwarf_guard_forge_elity.gif",
-        title: "Dwarf Guard #70 — Runic Iron-Guard / Molten-Forge Warlord",
+        title: "Dwarf Guard #70 — Deep-Granite Guard / Earthshaker Geomancer (Władca Ziemi)",
         cat: "new3",
         badge: ["Nowa Elita", "badge-new"],
-        desc: "1★ Runic Iron-Guard (ciemna kuta stal, ognisto-ruda broda, mithrilowy topór śledzący wszystkie 8 faz zamachu, złota tarcza) • 2★ Molten-Forge Warlord (natywny krasnoludzki hełm i obsydianowy pancerz bez doczepianych rogów, srebrzysto-popielata broda bez przeskakiwania przez zbroję, roztopiony lawowy topór śledzący każdą z 8 klatek zamachu oraz żarząca się tarcza)."
+        desc: "1★ Deep-Granite Guard (ciemnoniebieski granitowy pancerz, ognisto-miedziana broda, stalowy topór i brązowa tarcza) • 2★ Earthshaker Geomancer (bazaltowo-mszysty pancerz żywej skały, skalne naramienniki z głazów ziemi i szmaragdowych kryształów, wyrastające spod stóp stalagmity i głazy ziemi unoszące się przy każdym kroku oraz szmaragdowy topór i skalna tarcza)."
       },
       {
         file: "06_elf_styl1_drow.gif",
@@ -231,14 +231,14 @@
         title: "Elf Scout #64 — Drow Stalker / Void-Bow Assassin (Looktypes 609 / 610)",
         cat: "live",
         badge: ["Na Stagingu", "badge-live"],
-        desc: "1★ Drow Stalker (ciemno-śliwkowy pancerz zwiadowcy, obsydianowo-srebrny łuk, białe włosy, karmazynowe oczy) • 2★ Nightstalker (kuty ciemnostalowy hełm rangera ze srebrnym grzebieniem i karmazynowym piórem, krótka pelerynka 45° oraz rozjarzony Łuk Cienia / Void-Bow)."
+        desc: "1★ Drow Stalker (ciemno-śliwkowy pancerz zwiadowcy, obsydianowo-srebrny łuk, białe włosy, karmazynowe oczy) • 2★ Nightstalker (kuty ciemnostalowy hełm rangera ze srebrnym grzebieniem i rubinowym klejnotem bez wystającego rogu/pióra, krótka pelerynka 45° oraz rozjarzony Łuk Cienia / Void-Bow)."
       },
       {
         file: "10_elf_arcanist_drow.gif",
         title: "Elf Arcanist #63 — Drow Arcanist / Abyssal Archmage",
         cat: "drow",
         badge: ["Rodzina Drow", "badge-new"],
-        desc: "1★ Drow Arcanist (obsydianowa skóra, czarno-ametystowa szata, srebrny napierśnik z purpurowym klejnotem) • 2★ Abyssal Archmage (wycentrowana na czaszce korona z zakrzywionymi rogami w S/E/W/N, jarzące runy wzdłuż fałd szaty oraz lewitująca Kula Pustki / Void Orb)."
+        desc: "1★ Drow Arcanist (obsydianowa skóra, czarno-ametystowa szata, srebrny napierśnik i długie białe pasma włosów opadające z przodu na ramiona w S oraz E) • 2★ Abyssal Archmage (diadem z rubinem na czole z przodu nad oczami, długie białe pasma włosów opadające z przodu na pierś w S i E bez tylnego kucyka/rogów, jarzące runy szaty oraz lewitująca Kula Pustki)."
       },
       {
         file: "07_elf_styl2_cierniowy.gif",
@@ -365,10 +365,13 @@
     const lb = document.getElementById("lightbox");
     const lbImg = document.getElementById("lightbox-img");
 
+    const CACHE_VER = "?v=20261120_0906";
+
     function render() {
       gallery.innerHTML = "";
       items.forEach((it) => {
         const gifRel = "gifs/" + it.file;
+        const gifSrc = gifRel + CACHE_VER;
         const card = document.createElement("article");
         card.className = "card";
         card.dataset.cat = it.cat;
@@ -379,17 +382,17 @@
               <span class="badge ${it.badge[1]}">${it.badge[0]}</span>
             </div>
             <div class="actions">
-              <button class="btn copy-btn" data-url="${gifRel}">Kopiuj link GIF</button>
-              <a class="btn" href="${gifRel}" download="${it.file}">Pobierz</a>
+              <button class="btn copy-btn" data-url="${gifSrc}">Kopiuj link GIF</button>
+              <a class="btn" href="${gifSrc}" download="${it.file}">Pobierz</a>
             </div>
           </div>
           <p class="card-desc">${it.desc}</p>
           <div class="gif-wrap">
-            <img src="${gifRel}" alt="${it.title}" loading="lazy" />
+            <img src="${gifSrc}" alt="${it.title}" loading="lazy" />
           </div>
         `;
         card.querySelector("img").addEventListener("click", () => {
-          lbImg.src = gifRel;
+          lbImg.src = gifSrc;
           lb.classList.add("open");
         });
         card.querySelector(".copy-btn").addEventListener("click", async (e) => {

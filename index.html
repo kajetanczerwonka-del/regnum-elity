@@ -172,9 +172,9 @@
     <h1>Regnum — Elitarne Potwory (1★ &amp; 2★)</h1>
     <p>Wszystkie animowane podglądy (0★ oryginał | 1★ | 2★, kierunki S/E/W/N 3× + podgląd 1× w ciemnej jaskini). Kliknij dowolny GIF, aby powiększyć.</p>
     <div class="filters">
-      <button class="filter-btn active" data-filter="all">Wszystkie (48)</button>
+      <button class="filter-btn active" data-filter="all">Wszystkie (46)</button>
       <button class="filter-btn" data-filter="live">Na Serwerze / Stagingu (32)</button>
-      <button class="filter-btn" data-filter="new3">Propozycje / Nowe (4)</button>
+      <button class="filter-btn" data-filter="new3">Propozycje / Nowe (2)</button>
       <button class="filter-btn" data-filter="elf">Inne Style Elfa (2)</button>
       <button class="filter-btn" data-filter="alt">Warianty &amp; Archiwum (10)</button>
     </div>
@@ -190,22 +190,6 @@
 
   <script>
     const items = [
-      {
-        file: "45_demon_soul_devourer_elity.gif",
-        title: "Demon #35 — 2★ Soul Devourer / Pożeracz Dusz (propozycja)",
-        cat: "new3",
-        badge: ["Propozycja 2★", "badge-new"],
-        sprites: "sprites/45_demon_soul_devourer",
-        desc: "Propozycja 2★, jeszcze nie wgrana: popielata trupia skóra z fioletowymi cieniami, zielona paszcza CipSoftu urosła w piec dusz, którego światło przebija pęknięciami na piersi i brzuchu, żebra na bokach, czarne rogi i pazury, kolce grzbietu z zielonymi płomykami. Komplet: 4 kierunki × 3 klatki oraz 3 etapy zwłok (4097 → 4098 → 4099); wszystkie pliki w sprites/45_demon_soul_devourer/."
-      },
-      {
-        file: "46_demon_gilded_idol_elity.gif",
-        title: "Demon #35 — 2★ Gilded Idol / Złoty Bożek (propozycja)",
-        cat: "new3",
-        badge: ["Propozycja 2★", "badge-new"],
-        sprites: "sprites/46_demon_gilded_idol",
-        desc: "Propozycja 2★, jeszcze nie wgrana: demon odlany w złocie i czczony jak bóg, czarne pęknięcia złota z rubinowym światłem w środku, rogi, pazury i kolce grzbietu z czarnego onyksu, rubinowa paszcza. Komplet: 4 kierunki × 3 klatki oraz 3 etapy zwłok (4097 → 4098 → 4099); wszystkie pliki w sprites/46_demon_gilded_idol/."
-      },
       {
         file: "22_kobold_autorski_elity.gif",
         title: "Kobold 32×32 (100% Autorski From-Scratch) — Tunnel-Scavenger / Iron-Trapper / Flame-Shaman",
@@ -267,7 +251,8 @@
         title: "Demon #35 (Looktypes 599 / 600)",
         cat: "live",
         badge: ["Na Serwerze", "badge-live"],
-        desc: "1★ Abyssal Blood (ciemniejsza krwista skóra, obsydianowe rogi, złote oczy) • 2★ Infernal Overlord (spalone obsydianowe ciało, żyły lawy, kościane naramienniki i języki ognia)."
+        sprites: "sprites",
+        desc: "1★ Abyssal Blood (ciemniejsza krwista skóra, obsydianowe rogi, złote oczy) • 2★ Infernal Overlord (spalone obsydianowe ciało, żyły lawy, kościane naramienniki i języki ognia) • 3. propozycja 2★ Soul Devourer / Pożeracz Dusz (popielata trupia skóra, zielona paszcza jak piec dusz przebijający pęknięciami na piersi, żebra, czarne rogi i pazury) • 4. propozycja 2★ Gilded Idol / Złoty Bożek (ciało odlane w złocie, czarne pęknięcia z rubinowym światłem, rogi, pazury i kolce z czarnego onyksu, rubinowa paszcza). Propozycje 3 i 4 z 3 etapami zwłok; pliki w sprites/02_demon_soul_devourer/ i sprites/02_demon_gilded_idol/."
       },
       {
         file: "03_behemoth_v2_elity.gif",
@@ -534,7 +519,7 @@
     const lb = document.getElementById("lightbox");
     const lbImg = document.getElementById("lightbox-img");
 
-    const CACHE_VER = "?v=20261120_1430";
+    const CACHE_VER = "?v=20261120_1500";
 
     function render() {
       gallery.innerHTML = "";

@@ -234,13 +234,13 @@
     <h1>Regnum — Elitarne Potwory (1★ &amp; 2★)</h1>
     <p>Wszystkie animowane podglądy (0★ oryginał | 1★ | 2★, kierunki S/E/W/N 3× + podgląd 1× w ciemnej jaskini). Kliknij dowolny GIF, aby powiększyć.</p>
     <div class="filters">
-      <button class="filter-btn active" data-filter="all" id="filter-all">Wszystkie (50)</button>
+      <button class="filter-btn active" data-filter="all" id="filter-all">Wszystkie (51)</button>
       <button class="filter-btn" data-filter="live" id="filter-live">Na Serwerze / Stagingu (32)</button>
-      <button class="filter-btn" data-filter="new3" id="filter-new3">Propozycje / Nowe (6)</button>
+      <button class="filter-btn" data-filter="new3" id="filter-new3">Propozycje / Nowe (7)</button>
       <button class="filter-btn" data-filter="elf" id="filter-elf">Inne Style Elfa (2)</button>
       <button class="filter-btn" data-filter="alt" id="filter-alt">Warianty &amp; Archiwum (10)</button>
       <button class="filter-btn" data-filter="approved" id="filter-approved">✓ Zatwierdzone (0)</button>
-      <button class="filter-btn" data-filter="unapproved" id="filter-unapproved">Do sprawdzenia (50)</button>
+      <button class="filter-btn" data-filter="unapproved" id="filter-unapproved">Do sprawdzenia (51)</button>
       <button class="filter-btn" data-filter="trash" id="filter-trash">🗑 Kosz (0)</button>
     </div>
   </header>
@@ -263,6 +263,14 @@
 
   <script>
     const items = [
+      {
+        file: "50_orc_leader_helm_szata_elity.gif",
+        title: "Orc Leader #59 — 1★ Z Hełmem (Iron-Helm) | 2★ Z Hełmem i Szatą (Crimson Warlord)",
+        cat: "new3",
+        badge: ["Nowa Elita — Orc Leader", "badge-new"],
+        sprites: "sprites/50_orc_leader_helm_szata",
+        desc: "Klasyczna zielona skóra orka bez neonów, 100% animacja w stylu Tibia 7.4 (0 cut gear): 1★ Iron-Helm (kuty stalowy hełm bojowy z brązowym rantem i nosalem, ciemniejsza stalowa zbroja płytowa z brązowymi akcentami, hartowane miecze) → 2★ Crimson Warlord (rogaty hełm z obsydianowej stali ze złotym pasem i rubinem + królewska karmazynowo-złota szata bojowa widoczna ze wszystkich 4 stron: z przodu w S/E jako zdobiony surcoat ze złotym pasem i falującą spódnicą, a z tyłu w W/N jako szeroka pofałdowana szata/płaszcz w osi 45° ze złotym obszyciem!) + 3-etapowe zwłoki (z hełmem dla 1★ oraz hełmem i szatą dla 2★)."
+      },
       {
         file: "47_orc_leader_styl1_krwawy.gif",
         title: "Orc Leader #59 — Styl 1: Wzór Dwarf Guard (#70)",
@@ -628,7 +636,7 @@
     const lb = document.getElementById("lightbox");
     const lbImg = document.getElementById("lightbox-img");
 
-    const CACHE_VER = "?v=20261120_1815";
+    const CACHE_VER = "?v=20261120_1832";
     const STORAGE_KEY = "regnum_elity_approved";
     const DELETED_KEY = "regnum_elity_deleted";
     let approvedSet = new Set();

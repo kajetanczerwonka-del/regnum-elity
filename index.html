@@ -205,13 +205,13 @@
     <h1>Regnum — Elitarne Potwory (1★ &amp; 2★)</h1>
     <p>Wszystkie animowane podglądy (0★ oryginał | 1★ | 2★, kierunki S/E/W/N 3× + podgląd 1× w ciemnej jaskini). Kliknij dowolny GIF, aby powiększyć.</p>
     <div class="filters">
-      <button class="filter-btn active" data-filter="all">Wszystkie (47)</button>
+      <button class="filter-btn active" data-filter="all">Wszystkie (50)</button>
       <button class="filter-btn" data-filter="live">Na Serwerze / Stagingu (32)</button>
-      <button class="filter-btn" data-filter="new3">Propozycje / Nowe (3)</button>
+      <button class="filter-btn" data-filter="new3">Propozycje / Nowe (6)</button>
       <button class="filter-btn" data-filter="elf">Inne Style Elfa (2)</button>
       <button class="filter-btn" data-filter="alt">Warianty &amp; Archiwum (10)</button>
       <button class="filter-btn" data-filter="approved" id="filter-approved">✓ Zatwierdzone (0)</button>
-      <button class="filter-btn" data-filter="unapproved" id="filter-unapproved">Do sprawdzenia (47)</button>
+      <button class="filter-btn" data-filter="unapproved" id="filter-unapproved">Do sprawdzenia (50)</button>
     </div>
   </header>
 
@@ -225,6 +225,27 @@
 
   <script>
     const items = [
+      {
+        file: "47_orc_leader_styl1_krwawy.gif",
+        title: "Orc Leader #59 — Styl 1: Krwawy Klan (Ironhide / Fel-Blood Overlord)",
+        cat: "new3",
+        badge: ["Propozycja — Orc Leader", "badge-new"],
+        desc: "Propozycja stylu #1 dla rodziny Orków (Leader / Shaman / Berserker / Warlord): 1★ Ironhide Blood-Leader (ciemna oliwkowa skóra, czarny pancerz z karmazynowym rantem, żelazny czepiec wojenny, krwiste ostrza) → 2★ Fel-Blood Overlord (czerwona skóra Fel-Orca, obsydian + złoto, rogaty hełm, płonące bliźniacze miecze) + pełne 3-etapowe zwłoki dla obu tierów."
+      },
+      {
+        file: "48_orc_leader_styl2_mrozny.gif",
+        title: "Orc Leader #59 — Styl 2: Mroźny Klan (Ash-Hide / Glacial-Bone Warchief)",
+        cat: "new3",
+        badge: ["Propozycja — Orc Leader", "badge-new"],
+        desc: "Propozycja stylu #2 dla rodziny Orków (Leader / Shaman / Berserker / Warlord): 1★ Ash-Hide Frost-Leader (popielato-szara skóra, stalowo-granatowa zbroja, żelazny hełm, lodowe oczy i ostrza) → 2★ Glacial-Bone Warchief (blada mroźna skóra, kobaltowo-lodowy pancerz, rogaty kościano-lodowy hełm, świecące kryształowe ostrza) + pełne 3-etapowe zwłoki."
+      },
+      {
+        file: "49_orc_leader_styl3_legion.gif",
+        title: "Orc Leader #59 — Styl 3: Czarno-Złoty Legion (Black-Steel / Gilded Obsidian)",
+        cat: "new3",
+        badge: ["Propozycja — Orc Leader", "badge-new"],
+        desc: "Propozycja stylu #3 dla rodziny Orków (Leader / Shaman / Berserker / Warlord): klasyczna zielona skóra Orków zachowana! 1★ Black-Steel Commander (ciemna leśna zieleń, czarna stal z brązowym rantem, damasceńskie ostrza, ciemny hełm) → 2★ Gilded Obsidian Champion (obsydianowo-złoty pancerz, złoty rogaty hełm, złote runiczne miecze) + pełne 3-etapowe zwłoki."
+      },
       {
         file: "46_player_skin_masks.png",
         title: "Kolor Skóry Outfitów Graczy (Tibia.skin) — Wszystkie 49 Looktype'ów Po Poprawce",
@@ -569,7 +590,7 @@
     const lb = document.getElementById("lightbox");
     const lbImg = document.getElementById("lightbox-img");
 
-    const CACHE_VER = "?v=20261120_1718";
+    const CACHE_VER = "?v=20261120_1726";
     const STORAGE_KEY = "regnum_elity_approved";
     let approvedSet = new Set();
     try {

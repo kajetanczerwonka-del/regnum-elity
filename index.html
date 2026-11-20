@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Regnum — Podgląd Elitarnych Potworów (1★ / 2★)</title>
+  <style>
+    :root {
+      --bg: #111316;
+      --card: #1a1e23;
+      --border: #2c333c;
+      --text: #e8ecf1;
+      --muted: #9aa5b1;
+      --gold: #f0c05a;
+      --cyan: #67d8ff;
+      --green: #69db7c;
+      --purple: #c084fc;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+    header {
+      padding: 28px 20px 18px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(180deg, #171b21 0%, #111316 100%);
+    }
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 1.75rem;
+      letter-spacing: 0.3px;
+      color: var(--gold);
+    }
+    header p {
+      margin: 0 auto 16px;
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .filter-btn {
+      background: #232830;
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 7px 15px;
+      font-size: 0.88rem;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .filter-btn:hover { border-color: var(--gold); }
+    .filter-btn.active {
+      background: var(--gold);
+      color: #14161a;
+      border-color: var(--gold);
+      font-weight: 700;
+    }
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 24px 16px 56px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.32);
+    }
+    .card.hidden { display: none; }
+    .card-head {
+      padding: 16px 20px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+    .card-title-wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+    .card-title { margin: 0; font-size: 1.18rem; }
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+    .badge-new { background: rgba(103, 216, 255, 0.16); color: var(--cyan); border: 1px solid rgba(103, 216, 255, 0.4); }
+    .badge-live { background: rgba(105, 219, 124, 0.16); color: var(--green); border: 1px solid rgba(105, 219, 124, 0.4); }
+    .badge-alt { background: rgba(192, 132, 252, 0.16); color: var(--purple); border: 1px solid rgba(192, 132, 252, 0.4); }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn {
+      background: #27303b;
+      color: var(--text);
+      border: 1px solid #394452;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.84rem;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn:hover { background: #323e4d; border-color: var(--gold); }
+    .btn.copied { background: #265936; border-color: var(--green); color: #fff; }
+    .card-desc {
+      padding: 10px 20px 0;
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+    .gif-wrap {
+      padding: 16px 20px 20px;
+      text-align: center;
+    }
+    .gif-wrap img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      border: 1px solid #2b3138;
+      image-rendering: pixelated;
+      cursor: zoom-in;
+      background: #2a2e2c;
+    }
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.88);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 999;
+      cursor: zoom-out;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img {
+      max-width: 96vw;
+      max-height: 94vh;
+      border-radius: 10px;
+      image-rendering: pixelated;
+      box-shadow: 0 0 40px rgba(0,0,0,0.8);
+    }
+    footer {
+      text-align: center;
+      padding: 18px;
+      color: var(--muted);
+      font-size: 0.82rem;
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Regnum — Elitarne Potwory (1★ &amp; 2★)</h1>
+    <p>Wszystkie animowane podglądy (0★ oryginał | 1★ | 2★, kierunki S/E/W/N 3× + podgląd 1× w ciemnej jaskini). Kliknij dowolny GIF, aby powiększyć.</p>
+    <div class="filters">
+      <button class="filter-btn active" data-filter="all">Wszystkie (10)</button>
+      <button class="filter-btn" data-filter="elf">Elf — 3 Style (3)</button>
+      <button class="filter-btn" data-filter="live">Na Stagingu (5)</button>
+      <button class="filter-btn" data-filter="alt">Warianty Alternatywne (2)</button>
+    </div>
+  </header>
+
+  <main id="gallery"></main>
+
+  <div class="lightbox" id="lightbox">
+    <img id="lightbox-img" src="" alt="Powiększony podgląd" />
+  </div>
+
+  <footer>Regnum 7.4 / 7.72 Elite Sprites Showcase</footer>
+
+  <script>
+    const items = [
+      {
+        file: "06_elf_styl1_drow.gif",
+        title: "Elf #62 — Styl 1: Mroczny Elf / Drow",
+        cat: "elf",
+        badge: ["Nowy koncept", "badge-new"],
+        desc: "1★ Shadow Drow (obsydianowa skóra, białe włosy, srebrne naramienniki, różowe oczy) • 2★ Nightblade Drow (płaszcz cienia, srebrna korona z rubinem, zakrzywione ostrze cienia i iskry)."
+      },
+      {
+        file: "07_elf_styl2_cierniowy.gif",
+        title: "Elf #62 — Styl 2: Cierniowy Druid / Rogaty Elf",
+        cat: "elf",
+        badge: ["Nowy koncept", "badge-new"],
+        desc: "1★ Briar Elf (kora, mech, miedziane włosy, młode rogi, szmaragdowe oczy) • 2★ Blight Warden (wielkie poroże jelenia z jarzącymi pąkami, kostur z kryształem, peleryna z liści i zarodniki)."
+      },
+      {
+        file: "08_elf_styl3_sloneczny.gif",
+        title: "Elf #62 — Styl 3: Słoneczny / Astralny Wysoki Elf",
+        cat: "elf",
+        badge: ["Nowy koncept", "badge-new"],
+        desc: "1★ Sun-Gilded Elf (szkarłatno-złota tunika, złote naramienniki, szafirowy pas) • 2★ Solar Archon (perłowo-złota zbroja, promienista aureola słońca, świetliste skrzydła i krążące kule światła)."
+      },
+      {
+        file: "01_giant_spider_elity.gif",
+        title: "Giant Spider #38 (Looktypes 597 / 598)",
+        cat: "live",
+        badge: ["Na Stagingu", "badge-live"],
+        desc: "1★ Dread Widow (obsydianowo-krwisty pancerz, kościane kolce) • 2★ Armored Venom Broodmother (opancerzony karapaks + animowana chmura trucizny 7.72)."
+      },
+      {
+        file: "02_demon_elity.gif",
+        title: "Demon #35 (Looktypes 599 / 600)",
+        cat: "live",
+        badge: ["Na Stagingu", "badge-live"],
+        desc: "1★ Abyssal Blood (ciemniejsza krwista skóra, obsydianowe rogi, złote oczy) • 2★ Infernal Overlord (spalone obsydianowe ciało, żyły lawy, kościane naramienniki i języki ognia)."
+      },
+      {
+        file: "03_behemoth_v2_elity.gif",
+        title: "Behemoth #55 — v2 War-Chained / Frost-Iron (Looktypes 605 / 606)",
+        cat: "live",
+        badge: ["Na Stagingu", "badge-live"],
+        desc: "1★ War-Chained (pobliźniona skóra, ciężkie żelazne łańcuchy i kajdany) • 2★ Frost-Iron Colossus (lodowo-żelazna skóra, kute naramienniki i runy mrozu)."
+      },
+      {
+        file: "04_rat_szczurolak_elity.gif",
+        title: "Rat #21 — Szczurołak (Looktypes 601 / 602)",
+        cat: "live",
+        badge: ["Na Stagingu", "badge-live"],
+        desc: "1★ Szczurołak (dwunożny szczuroludź w uprzęży z bursztynowymi oczami) • 2★ Opancerzony Szczurołak Wojownik (żelazna zbroja, czerwone oczy, zakrwawiony topór bojowy)."
+      },
+      {
+        file: "05_caverat_szczurolak_elity.gif",
+        title: "Cave Rat #56 — Jaskiniowy Szczurołak (Looktypes 603 / 604)",
+        cat: "live",
+        badge: ["Na Stagingu", "badge-live"],
+        desc: "1★ Jaskiniowy Szczurołak (ciemnografitowe futro, toksyczno-zielone oczy) • 2★ Jaskiniowy Szczurołak Wojownik (zimna stalowa zbroja i zatruty topór)."
+      },
+      {
+        file: "02_demon_blazing_elity.gif",
+        title: "Demon #35 — Wariant Blazing Lava (Płonący)",
+        cat: "alt",
+        badge: ["Wariant", "badge-alt"],
+        desc: "Alternatywna wersja 2★ Infernal Demona z mocniejszymi płomieniami i płynącą lawą na ciele."
+      },
+      {
+        file: "03_behemoth_pentagram_elity.gif",
+        title: "Behemoth #55 — Wariant Pentagram + Poświata",
+        cat: "alt",
+        badge: ["Wariant", "badge-alt"],
+        desc: "Alternatywna wersja Behemotha z ognistą poświatą i jarzącym pentagramem na plecach."
+      }
+    ];
+
+    const gallery = document.getElementById("gallery");
+    const lb = document.getElementById("lightbox");
+    const lbImg = document.getElementById("lightbox-img");
+
+    function render() {
+      gallery.innerHTML = "";
+      items.forEach((it) => {
+        const gifRel = "gifs/" + it.file;
+        const card = document.createElement("article");
+        card.className = "card";
+        card.dataset.cat = it.cat;
+        card.innerHTML = `
+          <div class="card-head">
+            <div class="card-title-wrap">
+              <h2 class="card-title">${it.title}</h2>
+              <span class="badge ${it.badge[1]}">${it.badge[0]}</span>
+            </div>
+            <div class="actions">
+              <button class="btn copy-btn" data-url="${gifRel}">Kopiuj link GIF</button>
+              <a class="btn" href="${gifRel}" download="${it.file}">Pobierz</a>
+            </div>
+          </div>
+          <p class="card-desc">${it.desc}</p>
+          <div class="gif-wrap">
+            <img src="${gifRel}" alt="${it.title}" loading="lazy" />
+          </div>
+        `;
+        card.querySelector("img").addEventListener("click", () => {
+          lbImg.src = gifRel;
+          lb.classList.add("open");
+        });
+        card.querySelector(".copy-btn").addEventListener("click", async (e) => {
+          const fullUrl = new URL(gifRel, window.location.href).href;
+          try {
+            await navigator.clipboard.writeText(fullUrl);
+            const b = e.currentTarget;
+            const old = b.textContent;
+            b.textContent = "Skopiowano!";
+            b.classList.add("copied");
+            setTimeout(() => { b.textContent = old; b.classList.remove("copied"); }, 1600);
+          } catch {
+            prompt("Skopiuj link:", fullUrl);
+          }
+        });
+        gallery.appendChild(card);
+      });
+    }
+
+    document.querySelectorAll(".filter-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        const f = btn.dataset.filter;
+        document.querySelectorAll(".card").forEach((c) => {
+          c.classList.toggle("hidden", f !== "all" && c.dataset.cat !== f);
+        });
+      });
+    });
+
+    lb.addEventListener("click", () => lb.classList.remove("open"));
+    document.addEventListener("keydown", (e) => { if (e.key === "Escape") lb.classList.remove("open"); });
+
+    render();
+  </script>
+</body>
+</html>

@@ -76,10 +76,15 @@
     }
     .card {
       background: var(--card);
-      border: 1px solid var(--border);
+      border: 2px solid var(--border);
       border-radius: 14px;
       overflow: hidden;
       box-shadow: 0 8px 24px rgba(0,0,0,0.32);
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .card.approved {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.28), 0 8px 28px rgba(239, 68, 68, 0.22);
     }
     .card.hidden { display: none; }
     .card-head {
@@ -120,6 +125,34 @@
     }
     .btn:hover { background: #323e4d; border-color: var(--gold); }
     .btn.copied { background: #265936; border-color: var(--green); color: #fff; }
+    .approve-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      background: #27303b;
+      color: var(--text);
+      border: 1px solid #394452;
+      border-radius: 8px;
+      padding: 6px 12px;
+      font-size: 0.84rem;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.15s ease;
+    }
+    .approve-label:hover { background: #323e4d; border-color: #ef4444; }
+    .approve-label input {
+      width: 15px;
+      height: 15px;
+      accent-color: #ef4444;
+      cursor: pointer;
+      margin: 0;
+    }
+    .card.approved .approve-label {
+      background: rgba(239, 68, 68, 0.18);
+      border-color: #ef4444;
+      color: #ff8a8a;
+    }
     .card-desc {
       padding: 10px 20px 0;
       margin: 0;
@@ -172,11 +205,13 @@
     <h1>Regnum — Elitarne Potwory (1★ &amp; 2★)</h1>
     <p>Wszystkie animowane podglądy (0★ oryginał | 1★ | 2★, kierunki S/E/W/N 3× + podgląd 1× w ciemnej jaskini). Kliknij dowolny GIF, aby powiększyć.</p>
     <div class="filters">
-      <button class="filter-btn active" data-filter="all">Wszystkie (46)</button>
+      <button class="filter-btn active" data-filter="all">Wszystkie (47)</button>
       <button class="filter-btn" data-filter="live">Na Serwerze / Stagingu (32)</button>
-      <button class="filter-btn" data-filter="new3">Propozycje / Nowe (2)</button>
+      <button class="filter-btn" data-filter="new3">Propozycje / Nowe (3)</button>
       <button class="filter-btn" data-filter="elf">Inne Style Elfa (2)</button>
       <button class="filter-btn" data-filter="alt">Warianty &amp; Archiwum (10)</button>
+      <button class="filter-btn" data-filter="approved" id="filter-approved">✓ Zatwierdzone (0)</button>
+      <button class="filter-btn" data-filter="unapproved" id="filter-unapproved">Do sprawdzenia (47)</button>
     </div>
   </header>
 
@@ -527,16 +562,46 @@
     const lb = document.getElementById("lightbox");
     const lbImg = document.getElementById("lightbox-img");
 
-    const CACHE_VER = "?v=20261120_1619";
+    const CACHE_VER = "?v=20261120_1630";
+    const STORAGE_KEY = "regnum_elity_approved";
+    let approvedSet = new Set();
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      if (Array.isArray(saved)) approvedSet = new Set(saved);
+    } catch {}
+
+    function saveApproved() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...approvedSet])); } catch {}
+    }
+
+    let currentFilter = "all";
+    function updateCountsAndFilter() {
+      const appCount = items.filter((it) => approvedSet.has(it.file)).length;
+      const unappCount = items.length - appCount;
+      const fa = document.getElementById("filter-approved");
+      const fu = document.getElementById("filter-unapproved");
+      if (fa) fa.textContent = `✓ Zatwierdzone (${appCount})`;
+      if (fu) fu.textContent = `Do sprawdzenia (${unappCount})`;
+      document.querySelectorAll(".card").forEach((c) => {
+        const isApp = c.classList.contains("approved");
+        let hide = false;
+        if (currentFilter === "approved") hide = !isApp;
+        else if (currentFilter === "unapproved") hide = isApp;
+        else if (currentFilter !== "all") hide = c.dataset.cat !== currentFilter;
+        c.classList.toggle("hidden", hide);
+      });
+    }
 
     function render() {
       gallery.innerHTML = "";
       items.forEach((it) => {
         const gifRel = "gifs/" + it.file;
         const gifSrc = gifRel + CACHE_VER;
+        const isApproved = approvedSet.has(it.file);
         const card = document.createElement("article");
-        card.className = "card";
+        card.className = "card" + (isApproved ? " approved" : "");
         card.dataset.cat = it.cat;
+        card.dataset.file = it.file;
         card.innerHTML = `
           <div class="card-head">
             <div class="card-title-wrap">
@@ -544,6 +609,10 @@
               <span class="badge ${it.badge[1]}">${it.badge[0]}</span>
             </div>
             <div class="actions">
+              <label class="approve-label">
+                <input type="checkbox" class="approve-cb" ${isApproved ? "checked" : ""} />
+                <span>✓ Zatwierdzony</span>
+              </label>
               <button class="btn copy-btn" data-url="${gifSrc}">Kopiuj link GIF</button>
               <a class="btn" href="${gifSrc}" download="${it.file}">Pobierz</a>
               ${it.sprites ? `<a class="btn" href="https://github.com/kajetanczerwonka-del/regnum-elity/tree/main/${it.sprites}" target="_blank" rel="noopener">Pliki sprite'ów</a>` : ""}
@@ -554,6 +623,14 @@
             <img src="${gifSrc}" alt="${it.title}" loading="lazy" />
           </div>
         `;
+        card.querySelector(".approve-cb").addEventListener("change", (e) => {
+          const checked = e.target.checked;
+          if (checked) approvedSet.add(it.file);
+          else approvedSet.delete(it.file);
+          card.classList.toggle("approved", checked);
+          saveApproved();
+          updateCountsAndFilter();
+        });
         card.querySelector("img").addEventListener("click", () => {
           lbImg.src = gifSrc;
           lb.classList.add("open");
@@ -573,16 +650,15 @@
         });
         gallery.appendChild(card);
       });
+      updateCountsAndFilter();
     }
 
     document.querySelectorAll(".filter-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("active"));
         btn.classList.add("active");
-        const f = btn.dataset.filter;
-        document.querySelectorAll(".card").forEach((c) => {
-          c.classList.toggle("hidden", f !== "all" && c.dataset.cat !== f);
-        });
+        currentFilter = btn.dataset.filter;
+        updateCountsAndFilter();
       });
     });
 

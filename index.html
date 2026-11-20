@@ -125,6 +125,35 @@
     }
     .btn:hover { background: #323e4d; border-color: var(--gold); }
     .btn.copied { background: #265936; border-color: var(--green); color: #fff; }
+    .btn-delete {
+      background: #2f2024;
+      border-color: #6b2d37;
+      color: #ff9ca8;
+    }
+    .btn-delete:hover { background: #4a1f28; border-color: #ef4444; color: #fff; }
+    .btn-restore {
+      background: #1f3328;
+      border-color: #2f6b48;
+      color: #8ce99a;
+    }
+    .btn-restore:hover { background: #264a35; border-color: var(--green); color: #fff; }
+    .trash-bar {
+      max-width: 1180px;
+      margin: 16px auto 0;
+      padding: 12px 18px;
+      background: #23191c;
+      border: 1px solid #5c2b33;
+      border-radius: 10px;
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: #f3c6cc;
+      font-size: 0.9rem;
+    }
+    .trash-bar.visible { display: flex; }
+    .card.deleted { opacity: 0.78; border-style: dashed; border-color: #6b2d37; }
     .approve-label {
       display: inline-flex;
       align-items: center;
@@ -205,15 +234,24 @@
     <h1>Regnum — Elitarne Potwory (1★ &amp; 2★)</h1>
     <p>Wszystkie animowane podglądy (0★ oryginał | 1★ | 2★, kierunki S/E/W/N 3× + podgląd 1× w ciemnej jaskini). Kliknij dowolny GIF, aby powiększyć.</p>
     <div class="filters">
-      <button class="filter-btn active" data-filter="all">Wszystkie (50)</button>
-      <button class="filter-btn" data-filter="live">Na Serwerze / Stagingu (32)</button>
-      <button class="filter-btn" data-filter="new3">Propozycje / Nowe (6)</button>
-      <button class="filter-btn" data-filter="elf">Inne Style Elfa (2)</button>
-      <button class="filter-btn" data-filter="alt">Warianty &amp; Archiwum (10)</button>
+      <button class="filter-btn active" data-filter="all" id="filter-all">Wszystkie (50)</button>
+      <button class="filter-btn" data-filter="live" id="filter-live">Na Serwerze / Stagingu (32)</button>
+      <button class="filter-btn" data-filter="new3" id="filter-new3">Propozycje / Nowe (6)</button>
+      <button class="filter-btn" data-filter="elf" id="filter-elf">Inne Style Elfa (2)</button>
+      <button class="filter-btn" data-filter="alt" id="filter-alt">Warianty &amp; Archiwum (10)</button>
       <button class="filter-btn" data-filter="approved" id="filter-approved">✓ Zatwierdzone (0)</button>
       <button class="filter-btn" data-filter="unapproved" id="filter-unapproved">Do sprawdzenia (50)</button>
+      <button class="filter-btn" data-filter="trash" id="filter-trash">🗑 Kosz (0)</button>
     </div>
   </header>
+
+  <div class="trash-bar" id="trash-bar">
+    <span>Usunięte sprite'y są ukryte z galerii (zapisane lokalnie w przeglądarce). Możesz je przywrócić albo skopiować listę do trwałego usunięcia z repozytorium.</span>
+    <div class="actions">
+      <button class="btn" id="copy-deleted-btn">📋 Kopiuj listę usuniętych</button>
+      <button class="btn btn-restore" id="restore-all-btn">↩ Przywróć wszystkie</button>
+    </div>
+  </div>
 
   <main id="gallery"></main>
 
@@ -590,32 +628,63 @@
     const lb = document.getElementById("lightbox");
     const lbImg = document.getElementById("lightbox-img");
 
-    const CACHE_VER = "?v=20261120_1812";
+    const CACHE_VER = "?v=20261120_1815";
     const STORAGE_KEY = "regnum_elity_approved";
+    const DELETED_KEY = "regnum_elity_deleted";
     let approvedSet = new Set();
+    let deletedSet = new Set();
     try {
       const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
       if (Array.isArray(saved)) approvedSet = new Set(saved);
+    } catch {}
+    try {
+      const savedDel = JSON.parse(localStorage.getItem(DELETED_KEY) || "[]");
+      if (Array.isArray(savedDel)) deletedSet = new Set(savedDel);
     } catch {}
 
     function saveApproved() {
       try { localStorage.setItem(STORAGE_KEY, JSON.stringify([...approvedSet])); } catch {}
     }
+    function saveDeleted() {
+      try { localStorage.setItem(DELETED_KEY, JSON.stringify([...deletedSet])); } catch {}
+    }
 
     let currentFilter = "all";
+    const trashBar = document.getElementById("trash-bar");
+
     function updateCountsAndFilter() {
-      const appCount = items.filter((it) => approvedSet.has(it.file)).length;
-      const unappCount = items.length - appCount;
-      const fa = document.getElementById("filter-approved");
-      const fu = document.getElementById("filter-unapproved");
-      if (fa) fa.textContent = `✓ Zatwierdzone (${appCount})`;
-      if (fu) fu.textContent = `Do sprawdzenia (${unappCount})`;
+      const activeItems = items.filter((it) => !deletedSet.has(it.file));
+      const trashCount = items.length - activeItems.length;
+      const appCount = activeItems.filter((it) => approvedSet.has(it.file)).length;
+      const unappCount = activeItems.length - appCount;
+
+      const setTxt = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+      setTxt("filter-all", `Wszystkie (${activeItems.length})`);
+      setTxt("filter-live", `Na Serwerze / Stagingu (${activeItems.filter((i) => i.cat === "live").length})`);
+      setTxt("filter-new3", `Propozycje / Nowe (${activeItems.filter((i) => i.cat === "new3").length})`);
+      setTxt("filter-elf", `Inne Style Elfa (${activeItems.filter((i) => i.cat === "elf").length})`);
+      setTxt("filter-alt", `Warianty & Archiwum (${activeItems.filter((i) => i.cat === "alt").length})`);
+      setTxt("filter-approved", `✓ Zatwierdzone (${appCount})`);
+      setTxt("filter-unapproved", `Do sprawdzenia (${unappCount})`);
+      setTxt("filter-trash", `🗑 Kosz (${trashCount})`);
+
+      if (trashBar) trashBar.classList.toggle("visible", currentFilter === "trash" && trashCount > 0);
+
       document.querySelectorAll(".card").forEach((c) => {
+        const isDel = c.classList.contains("deleted");
         const isApp = c.classList.contains("approved");
         let hide = false;
-        if (currentFilter === "approved") hide = !isApp;
-        else if (currentFilter === "unapproved") hide = isApp;
-        else if (currentFilter !== "all") hide = c.dataset.cat !== currentFilter;
+        if (currentFilter === "trash") {
+          hide = !isDel;
+        } else if (isDel) {
+          hide = true;
+        } else if (currentFilter === "approved") {
+          hide = !isApp;
+        } else if (currentFilter === "unapproved") {
+          hide = isApp;
+        } else if (currentFilter !== "all") {
+          hide = c.dataset.cat !== currentFilter;
+        }
         c.classList.toggle("hidden", hide);
       });
     }
@@ -626,8 +695,9 @@
         const gifRel = "gifs/" + it.file;
         const gifSrc = gifRel + CACHE_VER;
         const isApproved = approvedSet.has(it.file);
+        const isDeleted = deletedSet.has(it.file);
         const card = document.createElement("article");
-        card.className = "card" + (isApproved ? " approved" : "");
+        card.className = "card" + (isApproved ? " approved" : "") + (isDeleted ? " deleted" : "");
         card.dataset.cat = it.cat;
         card.dataset.file = it.file;
         card.innerHTML = `
@@ -644,6 +714,7 @@
               <button class="btn copy-btn" data-url="${gifSrc}">Kopiuj link GIF</button>
               <a class="btn" href="${gifSrc}" download="${it.file}">Pobierz</a>
               ${it.sprites ? `<a class="btn" href="https://github.com/kajetanczerwonka-del/regnum-elity/tree/main/${it.sprites}" target="_blank" rel="noopener">Pliki sprite'ów</a>` : ""}
+              <button class="btn ${isDeleted ? "btn-restore" : "btn-delete"} del-btn">${isDeleted ? "↩ Przywróć" : "🗑 Usuń"}</button>
             </div>
           </div>
           <p class="card-desc">${it.desc}</p>
@@ -657,6 +728,22 @@
           else approvedSet.delete(it.file);
           card.classList.toggle("approved", checked);
           saveApproved();
+          updateCountsAndFilter();
+        });
+        card.querySelector(".del-btn").addEventListener("click", (e) => {
+          const btn = e.currentTarget;
+          if (deletedSet.has(it.file)) {
+            deletedSet.delete(it.file);
+            card.classList.remove("deleted");
+            btn.className = "btn btn-delete del-btn";
+            btn.textContent = "🗑 Usuń";
+          } else {
+            deletedSet.add(it.file);
+            card.classList.add("deleted");
+            btn.className = "btn btn-restore del-btn";
+            btn.textContent = "↩ Przywróć";
+          }
+          saveDeleted();
           updateCountsAndFilter();
         });
         card.querySelector("img").addEventListener("click", () => {
@@ -680,6 +767,27 @@
       });
       updateCountsAndFilter();
     }
+
+    document.getElementById("restore-all-btn").addEventListener("click", () => {
+      deletedSet.clear();
+      saveDeleted();
+      render();
+    });
+
+    document.getElementById("copy-deleted-btn").addEventListener("click", async (e) => {
+      const list = [...deletedSet].join("\n");
+      if (!list) return;
+      try {
+        await navigator.clipboard.writeText(list);
+        const b = e.currentTarget;
+        const old = b.textContent;
+        b.textContent = "Skopiowano listę!";
+        b.classList.add("copied");
+        setTimeout(() => { b.textContent = old; b.classList.remove("copied"); }, 1600);
+      } catch {
+        prompt("Lista usuniętych plików:", list);
+      }
+    });
 
     document.querySelectorAll(".filter-btn").forEach((btn) => {
       btn.addEventListener("click", () => {

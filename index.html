@@ -234,13 +234,13 @@
     <h1>Regnum — Elitarne Potwory (1★ &amp; 2★)</h1>
     <p>Wszystkie animowane podglądy (0★ oryginał | 1★ | 2★, kierunki S/E/W/N 3× + podgląd 1× w ciemnej jaskini). Kliknij dowolny GIF, aby powiększyć.</p>
     <div class="filters">
-      <button class="filter-btn active" data-filter="all" id="filter-all">Wszystkie (51)</button>
+      <button class="filter-btn active" data-filter="all" id="filter-all">Wszystkie (53)</button>
       <button class="filter-btn" data-filter="live" id="filter-live">Na Serwerze / Stagingu (32)</button>
-      <button class="filter-btn" data-filter="new3" id="filter-new3">Propozycje / Nowe (7)</button>
+      <button class="filter-btn" data-filter="new3" id="filter-new3">Propozycje / Nowe (9)</button>
       <button class="filter-btn" data-filter="elf" id="filter-elf">Inne Style Elfa (2)</button>
       <button class="filter-btn" data-filter="alt" id="filter-alt">Warianty &amp; Archiwum (10)</button>
       <button class="filter-btn" data-filter="approved" id="filter-approved">✓ Zatwierdzone (0)</button>
-      <button class="filter-btn" data-filter="unapproved" id="filter-unapproved">Do sprawdzenia (51)</button>
+      <button class="filter-btn" data-filter="unapproved" id="filter-unapproved">Do sprawdzenia (53)</button>
       <button class="filter-btn" data-filter="trash" id="filter-trash">🗑 Kosz (0)</button>
     </div>
   </header>
@@ -263,6 +263,22 @@
 
   <script>
     const items = [
+      {
+        file: "52_orc_warlord_helm_szata_elity.gif",
+        title: "Orc Warlord #2 — 1★ Z Hełmem (Silver-Helm) | 2★ Z Hełmem i Szatą (Imperial Warlord)",
+        cat: "new3",
+        badge: ["Nowa Elita — Orc Warlord", "badge-new"],
+        sprites: "sprites/52_orc_warlord_helm_szata",
+        desc: "Spójny zestaw z Orc Leaderem #59 (0 cut gear, w pełni animowany dwuręczny miecz łącznie z czubkiem ostrza w N/W f=2): 1★ Silver-Helm (lśniący kuty srebrzysto-stalowy hełm z brązowym rantem, szafirem i zagiętymi rogami zamiast drobnych szarych kolców, jasna stalowa zbroja płytowa kontrastująca z ciemnym 0★, miecz z szafirową głowicą) → 2★ Imperial Warlord (obsydianowo-złoty rogaty hełm z rubinem + królewska karmazynowo-złota szata bojowa widoczna ze wszystkich 4 stron: z przodu w S/E jako zdobiony surcoat ze złotym pasem i spódnicą, z tyłu w W/N jako szeroka pofałdowana szata w osi 45° ze złotym obszyciem, miecz z rubinową głowicą!) + 3-etapowe zwłoki (4148→4149→4147)."
+      },
+      {
+        file: "51_orc_berserker_helm_szata_elity.gif",
+        title: "Orc Berserker #8 — 1★ Z Hełmem (Iron-Helm) | 2★ Z Hełmem i Szatą (Crimson Berserker)",
+        cat: "new3",
+        badge: ["Nowa Elita — Orc Berserker", "badge-new"],
+        sprites: "sprites/51_orc_berserker_helm_szata",
+        desc: "Spójny zestaw z Orc Leaderem #59 (0 cut gear, hełmy zablokowane 1:1 na dynamicznym skoku (-1,-2) Berserkera, pełna animacja gigantycznej halabardy): 1★ Iron-Helm (kuty stalowy hełm bojowy z brązowym rantem i nosalem odsłaniający wściekłe czerwone oczy i ryczącą paszczę z kłami, brązowa bojowa uprząż, hartowana stalowa halabarda) → 2★ Crimson Berserker (rogaty hełm z obsydianowej stali ze złotym pasem i rubinem + pełna karmazynowo-złota szata bojowa widoczna ze wszystkich 4 stron: z przodu w S/E ze złotym pasem i spódnicą pod halabardą, z tyłu w W/N jako szeroka pofałdowana szata w osi 45°!) + 3-etapowe zwłoki (4045→4046→4147)."
+      },
       {
         file: "50_orc_leader_helm_szata_elity.gif",
         title: "Orc Leader #59 — 1★ Z Hełmem (Iron-Helm) | 2★ Z Hełmem i Szatą (Crimson Warlord)",
@@ -636,7 +652,7 @@
     const lb = document.getElementById("lightbox");
     const lbImg = document.getElementById("lightbox-img");
 
-    const CACHE_VER = "?v=20261120_1832";
+    const CACHE_VER = "?v=20261120_1848";
     const STORAGE_KEY = "regnum_elity_approved";
     const DELETED_KEY = "regnum_elity_deleted";
     let approvedSet = new Set();

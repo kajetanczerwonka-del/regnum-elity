@@ -309,6 +309,13 @@
         desc: "Porównanie 1:1 z animowanym Hero #73 (wiersz WZÓR na górze): klasyczna zielona skóra orka w rycerskim wydaniu! 1★ Knight-Slayer (ciepła rycerska zbroja w palecie Hero, niebiesko-stalowe nogawice, czerwony szal pod szyją, stalowe miecze) → 2★ Crimson-Cloak (polerowana srebrna zbroja ze złotym wykończeniem, stalowy rycerski hełm z nosalem, szeroka gładko cieniowana szkarłatna peleryna dokładnie w stylu Hero #73 i poszerzone srebrne miecze!) + 3-etapowe zwłoki."
       },
       {
+        file: "49_ebony_eyes_check.png",
+        title: "Fix na Oczy i Skórę Ebony — Zbliżenie 5× Wszystkich 49 Outfitów (Oryginał | Ebony | Maska)",
+        cat: "live",
+        badge: ["Na Serwerze — Oczy & Skin", "badge-live"],
+        desc: "Zbliżenie 5× twarzy i oczu wszystkich 49 looktype'ów na najciemniejszej skórze Ebony (#16): zachowane wszystkie ciemne, zielone, niebieskie i czerwone oczy (strip_eye_pixels z progiem v <= 112) przy jednoczesnym usunięciu białych punktów na twarzach, brodach, rękach i ramionach (grow_skin_rim + pale_rim + split_core)."
+      },
+      {
         file: "48_thaian_soldier_szata_final.gif",
         title: "Thaian Soldier (542 M / 543 F) — Szata V3 (Podniesione W + Wyprostowane N + Kon 544)",
         cat: "new3",
@@ -666,7 +673,7 @@
     const lb = document.getElementById("lightbox");
     const lbImg = document.getElementById("lightbox-img");
 
-    const CACHE_VER = "?v=20261121_1247";
+    const CACHE_VER = "?v=20261121_1259";
     const STORAGE_KEY = "regnum_elity_approved";
     const DELETED_KEY = "regnum_elity_deleted";
     let approvedSet = new Set();
